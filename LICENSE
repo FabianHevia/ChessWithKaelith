@@ -1,34 +1,106 @@
-
-Chess With Kaelith – Custom License
-Version 1.0
+Chess with Kaelith – Custom License
+Version 1.1
 
 Copyright (c) 2026 Fabián Hevia
 All rights reserved.
 
-This software, including but not limited to its source code, binaries,
-assets, artwork, audio, visual design, narrative, lore, and documentation
-(the “Software”), is protected by copyright law.
+────────────────────────────────────────────────────────────
+1. OWNERSHIP AND SCOPE
+────────────────────────────────────────────────────────────
 
-Permission is granted to any person to download and use the Software free of
-charge for personal, non-commercial purposes only.
+This software project, titled “Chess with Kaelith”, includes original source
+code, original visual design, original narrative and lore, original UI/UX
+structure, and original project architecture created by the copyright holder
+(the “Original Work”).
+
+Certain non-original assets (including but not limited to images, audio, and
+music) are used under third-party licenses and remain the property of their
+respective owners. Such content is governed by its own license terms and is
+explicitly excluded from exclusive ownership claims by the author.
+
+────────────────────────────────────────────────────────────
+2. PERMISSION OF USE (ORIGINAL WORK)
+────────────────────────────────────────────────────────────
+
+Permission is granted to any person to download and use the Original Work
+free of charge for personal, non-commercial purposes only.
+
+This project is NOT open source.
+
+────────────────────────────────────────────────────────────
+3. RESTRICTIONS (ORIGINAL WORK)
+────────────────────────────────────────────────────────────
 
 The following actions are explicitly NOT permitted without prior written
 permission from the copyright holder:
 
-- Modifying, adapting, or creating derivative works based on the Software
-- Redistributing the Software, in source or binary form
-- Selling, sublicensing, or commercially exploiting the Software
-- Using any part of the Software (including lore, assets, or visual identity)
+- Modifying, adapting, or creating derivative works based on the Original Work
+- Redistributing the Original Work, in source or binary form
+- Selling, sublicensing, or commercially exploiting the Original Work
+- Using the Original Work (including original lore, visual identity, or design)
   in other projects, products, or media
 - Reverse engineering, decompiling, or attempting to extract proprietary
   components beyond what is permitted by applicable law
 
-This Software is provided “AS IS”, without warranty of any kind, express or
-implied, including but not limited to the warranties of merchantability,
-fitness for a particular purpose, and non-infringement. In no event shall
-the author be liable for any claim, damages, or other liability, whether in
-an action of contract, tort, or otherwise, arising from, out of, or in
-connection with the Software or the use or other dealings in the Software.
+────────────────────────────────────────────────────────────
+4. THIRD-PARTY CONTENT NOTICE
+────────────────────────────────────────────────────────────
 
-Downloading, installing, or using the Software constitutes acceptance of
-the terms of this license.
+This project includes third-party content licensed from external platforms,
+used in accordance with their respective license terms.
+
+4.1 Pixabay Content
+
+Some visual and/or audio assets are sourced from Pixabay and are licensed under
+the Pixabay Content License.
+
+Pixabay content may be:
+- Used free of charge
+- Modified or adapted
+- Used without attribution (attribution appreciated but not required)
+
+Restrictions include (but are not limited to):
+- Content may not be sold or redistributed on a standalone basis
+- Content may not be used in a misleading, deceptive, immoral, or illegal way
+- Content may not be used as part of a trademark, logo, or brand identity
+- Additional third-party rights may apply (e.g., trademarks, privacy rights)
+
+Full license:
+https://pixabay.com/service/license/
+
+4.2 Suno AI Content (Free Plan)
+
+Some music tracks used in this project were generated using Suno AI under the
+Free Plan.
+
+According to Suno’s Terms:
+- Generated music is intended for personal, non-commercial use only
+- Tracks may not be monetized
+- Music may be shared only via Suno-provided links
+- Ownership and usage remain subject to Suno’s Terms of Service
+
+The inclusion of Suno-generated content does not grant redistribution or
+commercial rights to end users.
+
+Full terms:
+https://suno.ai/terms
+
+────────────────────────────────────────────────────────────
+5. DISCLAIMER OF WARRANTY
+────────────────────────────────────────────────────────────
+
+THIS SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+
+IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM,
+OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+────────────────────────────────────────────────────────────
+6. ACCEPTANCE
+────────────────────────────────────────────────────────────
+
+Downloading, installing, or using this software constitutes acceptance of the
+terms of this license.
