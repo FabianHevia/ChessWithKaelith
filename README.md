@@ -25,11 +25,3 @@ The player does not simply “play”, but aligns with philosophies, memories, a
 This is an evolving project under active development.
 Expect experimentation, iteration, and gradual expansion of features and lore.
 
-## License
-
-This project is free to download and use for personal, non-commercial purposes.
-
-It is not open source.
-Source code, assets, and lore are protected and may not be modified,
-redistributed, or used commercially without explicit permission.
-
