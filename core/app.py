@@ -11,18 +11,12 @@ import tkinter as tk
 from tkinter import ttk
 from pathlib import Path
 from typing import Dict, Type, Optional, Callable
-from PIL import Image, ImageTk
+from PIL import Image
 
 from core.settings import SettingsManager
 from core.profile_manager import ProfileManager
 from core.audio_manager import AudioManager
 from localization.i18n import I18nManager
-
-
-from ui.screens.main_menu import MainMenuScreen
-from ui.screens.profile_select import ProfileSelectScreen
-from ui.screens.profile_create import ProfileCreateScreen
-from ui.screens.options_menu import OptionsMenuScreen
 
 
 class ChessWithKaelithApp:
@@ -60,7 +54,7 @@ class ChessWithKaelithApp:
         self.settings = SettingsManager(self.data_path / "settings.json")
         self.profiles = ProfileManager(self.data_path / "profiles.json")
         self.i18n = I18nManager(self.root_path / "localization")
-        self.audio = AudioManager(self.assets_path)
+        self.audio = AudioManager(self.assets_path, self.settings)
         
         # Aplicar volúmenes guardados
         self.audio.set_master_volume(self.settings.get("volume", 0.7))
@@ -75,8 +69,7 @@ class ChessWithKaelithApp:
         self.current_screen: Optional[tk.Frame] = None
         self.screens: Dict[str, Type] = {}
         
-        # Referencias de imágenes (evitar garbage collection)
-        self._bg_photo: Optional[ImageTk.PhotoImage] = None
+        # Referencia a imagen de fondo original (usada por las pantallas)
         self._original_bg: Optional[Image.Image] = None
         
         # Callbacks para actualización de idioma
@@ -85,36 +78,17 @@ class ChessWithKaelithApp:
         # Configurar estilo
         self._setup_styles()
         
-        # Configurar fondo de la ventana
+        # Configurar fondo de la ventana (color de fallback)
         self.root.configure(bg='#1a2318')
         
-        # Cargar imagen de fondo original
+        # Cargar imagen de fondo original (se usará en cada pantalla)
         self._load_background_image()
         
-        # Canvas principal para el background
-        self.bg_canvas = tk.Canvas(
-            self.root,
-            highlightthickness=0,
-            bg='#1a2318'
-        )
-        self.bg_canvas.place(x=0, y=0, relwidth=1, relheight=1)
-        
-        # ID del item de imagen en el canvas
-        self._bg_image_id = None
-        
-        # Contenedor principal para las pantallas
-        self.main_container = tk.Frame(self.root, bg='#1a2318')
-        self.main_container.place(relx=0, rely=0, relwidth=1, relheight=1)
+        # El contenedor principal es el root directamente
+        self.main_container = self.root
         
         # Registrar pantallas
         self._register_screens()
-        
-        # Configurar eventos de redimensión
-        self.root.bind("<Configure>", self._on_resize)
-        self._last_size = (0, 0)
-        
-        # Renderizar background inicial después de que la ventana esté lista
-        self.root.after(100, self._update_background)
         
         # Aplicar configuración de pantalla completa si está guardada
         if self.settings.get("fullscreen", False):
@@ -150,80 +124,30 @@ class ChessWithKaelithApp:
         }
     
     def _load_background_image(self):
-        """Carga la imagen de fondo original."""
-        bg_path = self.assets_path / "background.png"
+        """Carga la imagen de fondo original (soporta png, jpg, webp)."""
+        # Buscar en orden de preferencia
+        supported_formats = ['background.webp', 'background.png', 'background.jpg']
         
-        if bg_path.exists():
-            try:
-                self._original_bg = Image.open(bg_path)
-            except Exception as e:
-                print(f"Error cargando background: {e}")
-                self._original_bg = None
-        else:
-            print(f"Background no encontrado: {bg_path}")
-            self._original_bg = None
-    
-    def _update_background(self):
-        """Actualiza el background al tamaño de la ventana."""
-        if self._original_bg is None:
-            return
+        for filename in supported_formats:
+            bg_path = self.assets_path / filename
+            if bg_path.exists():
+                try:
+                    # Abrir imagen
+                    img = Image.open(bg_path)
+                    # IMPORTANTE: Forzar carga completa de la imagen
+                    # (PIL hace lazy loading por defecto)
+                    img.load()
+                    # Convertir a RGBA para consistencia
+                    self._original_bg = img.convert('RGBA')
+                    print(f"Background cargado: {filename} ({img.width}x{img.height})")
+                    return
+                except Exception as e:
+                    print(f"Error cargando {filename}: {e}")
+                    import traceback
+                    traceback.print_exc()
         
-        # Obtener tamaño actual de la ventana
-        width = self.root.winfo_width()
-        height = self.root.winfo_height()
-        
-        if width < 10 or height < 10:
-            return
-        
-        # Evitar actualizaciones innecesarias
-        if (width, height) == self._last_size:
-            return
-        self._last_size = (width, height)
-        
-        try:
-            # Calcular dimensiones manteniendo aspecto (cover)
-            img_ratio = self._original_bg.width / self._original_bg.height
-            win_ratio = width / height
-            
-            if win_ratio > img_ratio:
-                new_width = width
-                new_height = int(width / img_ratio)
-            else:
-                new_height = height
-                new_width = int(height * img_ratio)
-            
-            # Redimensionar
-            resized = self._original_bg.resize(
-                (new_width, new_height),
-                Image.Resampling.LANCZOS
-            )
-            
-            # Centrar y recortar
-            left = (new_width - width) // 2
-            top = (new_height - height) // 2
-            cropped = resized.crop((left, top, left + width, top + height))
-            
-            # Crear PhotoImage y mantener referencia
-            self._bg_photo = ImageTk.PhotoImage(cropped)
-            
-            # Actualizar canvas
-            self.bg_canvas.delete("all")
-            self._bg_image_id = self.bg_canvas.create_image(
-                0, 0,
-                image=self._bg_photo,
-                anchor='nw'
-            )
-            
-        except Exception as e:
-            print(f"Error actualizando background: {e}")
-    
-    def _on_resize(self, event):
-        """Maneja el evento de redimensión de ventana."""
-        if event.widget == self.root:
-            # Usar after para evitar actualizaciones excesivas
-            if hasattr(self, '_resize_after_id') and self._resize_after_id:
-                self.root.after_cancel(self._resize_after_id)
-            self._resize_after_id = self.root.after(50, self._update_background)
+        print(f"Background no encontrado en: {self.assets_path}")
+        self._original_bg = None
     
     def _register_screens(self):
         """Registra todas las pantallas disponibles."""
@@ -255,10 +179,11 @@ class ChessWithKaelithApp:
         if self.current_screen is not None:
             self.current_screen.destroy()
         
-        # Crear nueva pantalla
+        # Crear nueva pantalla (sobre el background)
         new_screen = self.screens[screen_name](self.main_container, self, **kwargs)
         self.current_screen = new_screen
-        new_screen.pack(fill=tk.BOTH, expand=True)
+        # Usar place() para que la pantalla se coloque sobre el background
+        new_screen.place(relx=0, rely=0, relwidth=1, relheight=1)
     
     def register_language_callback(self, callback: Callable):
         """Registra un callback para actualización de idioma."""

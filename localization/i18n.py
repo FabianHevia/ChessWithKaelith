@@ -12,7 +12,6 @@ from typing import Dict, Optional
 
 
 class I18nManager:
-
     """
     Gestor de internacionalización.
     Maneja las traducciones de la aplicación.
@@ -26,14 +25,12 @@ class I18nManager:
     DEFAULT_LANGUAGE = 'es'
     
     def __init__(self, localization_path: Path):
-
         """
         Inicializa el gestor de i18n.
         
         Args:
             localization_path: Ruta al directorio de localizaciones
         """
-
         self.localization_path = localization_path
         self._current_language = self.DEFAULT_LANGUAGE
         self._translations: Dict[str, Dict[str, str]] = {}
@@ -44,15 +41,10 @@ class I18nManager:
         # Intentar cargar desde archivos
         self._load_translations()
     
-
     def _load_default_translations(self):
-
         """Carga las traducciones por defecto embebidas."""
-
         self._translations = {
-
             'es': {
-
                 # Menú principal
                 'app_title': 'Chess with Kaelith',
                 'play': 'Jugar',
@@ -104,15 +96,25 @@ class I18nManager:
                 'discard': 'Descartar',
                 'reset_defaults': 'Restablecer valores',
                 
+                # Música
+                'now_playing': 'Reproduciendo',
+                'playlist': 'Lista de reproducción',
+                'shuffle': 'Aleatorio',
+                'repeat': 'Repetir',
+                'current_track': 'Canción actual',
+                'next_track': 'Siguiente',
+                'previous_track': 'Anterior',
+                'no_music': 'Sin música',
+                'enabled': 'Activada',
+                'disabled': 'Desactivada',
+                
                 # Otros
                 'loading': 'Cargando...',
                 'error': 'Error',
                 'success': 'Éxito',
                 'continue': 'Continuar',
             },
-
             'en': {
-
                 # Main menu
                 'app_title': 'Chess with Kaelith',
                 'play': 'Play',
@@ -164,6 +166,18 @@ class I18nManager:
                 'discard': 'Discard',
                 'reset_defaults': 'Reset to defaults',
                 
+                # Music
+                'now_playing': 'Now Playing',
+                'playlist': 'Playlist',
+                'shuffle': 'Shuffle',
+                'repeat': 'Repeat',
+                'current_track': 'Current track',
+                'next_track': 'Next',
+                'previous_track': 'Previous',
+                'no_music': 'No music',
+                'enabled': 'Enabled',
+                'disabled': 'Disabled',
+                
                 # Others
                 'loading': 'Loading...',
                 'error': 'Error',
@@ -172,11 +186,8 @@ class I18nManager:
             }
         }
     
-
     def _load_translations(self):
-
         """Intenta cargar traducciones desde archivos externos."""
-        
         for lang_code in self.SUPPORTED_LANGUAGES:
             filepath = self.localization_path / f"{lang_code}.json"
             if filepath.exists():
@@ -186,34 +197,26 @@ class I18nManager:
                 except (json.JSONDecodeError, IOError) as e:
                     print(f"Error cargando traducciones de {lang_code}: {e}")
     
-
     def set_language(self, language: str):
-
         """
         Establece el idioma actual.
         
         Args:
             language: Código del idioma ('es' o 'en')
         """
-
         if language in self.SUPPORTED_LANGUAGES:
             self._current_language = language
     
-
     def get_language(self) -> str:
-
         """
         Obtiene el idioma actual.
         
         Returns:
             Código del idioma actual
         """
-
         return self._current_language
     
-
     def get(self, key: str, default: Optional[str] = None) -> str:
-
         """
         Obtiene una traducción.
         
@@ -224,27 +227,21 @@ class I18nManager:
         Returns:
             Texto traducido
         """
-
         translations = self._translations.get(self._current_language, {})
         
-
         if key in translations:
             return translations[key]
         
-
         # Fallback al idioma por defecto
         if self._current_language != self.DEFAULT_LANGUAGE:
             default_translations = self._translations.get(self.DEFAULT_LANGUAGE, {})
             if key in default_translations:
                 return default_translations[key]
         
-
         # Si no hay traducción, devolver la clave o el default
         return default if default is not None else key
     
-
     def get_language_name(self, language: Optional[str] = None) -> str:
-
         """
         Obtiene el nombre del idioma.
         
@@ -254,18 +251,14 @@ class I18nManager:
         Returns:
             Nombre del idioma
         """
-
         lang = language or self._current_language
         return self.SUPPORTED_LANGUAGES.get(lang, lang)
     
-
     def get_available_languages(self) -> Dict[str, str]:
-
         """
         Obtiene los idiomas disponibles.
         
         Returns:
             Diccionario con códigos y nombres de idiomas
         """
-        
         return self.SUPPORTED_LANGUAGES.copy()
